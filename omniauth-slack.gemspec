@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.email         = ['hello@ferrerluis.com']
   spec.description   = %q{OmniAuth strategy for Slack OAuth V2}
   spec.summary       = %q{OmniAuth strategy for Slack OAuth V2}
-  spec.homepage      = 'https://github.com/ferrerluis/omniauth-slack.git'
+  spec.homepage      = 'https://github.com/ferrerluis/omniauth-slack-v2.git'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files`.split($/)
