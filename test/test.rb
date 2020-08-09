@@ -1,5 +1,5 @@
 require "helper"
-require "omniauth-slack"
+require "omniauth-slack-v2"
 
 class StrategyTest < StrategyTestCase
   include OAuth2StrategyTests
@@ -11,11 +11,11 @@ class ClientTest < StrategyTestCase
   end
 
   test "has correct authorize url" do
-    assert_equal "/oauth/authorize", strategy.client.options[:authorize_url]
+    assert_equal "/oauth/v2/authorize", strategy.client.options[:authorize_url]
   end
 
   test "has correct token url" do
-    assert_equal "/api/oauth.access", strategy.client.options[:token_url]
+    assert_equal "/api/oauth.v2.access", strategy.client.options[:token_url]
   end
 end
 
@@ -24,7 +24,7 @@ class CallbackUrlTest < StrategyTestCase
     url_base = "http://auth.request.com"
     @request.stubs(:url).returns("#{url_base}/some/page")
     strategy.stubs(:script_name).returns("") # as not to depend on Rack env
-    assert_equal "#{url_base}/auth/slack/callback", strategy.callback_url
+    assert_equal "#{url_base}/auth/slack/callback", strategy.send(:callback_url)
   end
 
   test "returns path from callback_path option" do
@@ -32,7 +32,7 @@ class CallbackUrlTest < StrategyTestCase
     url_base = "http://auth.request.com"
     @request.stubs(:url).returns("#{url_base}/page/path")
     strategy.stubs(:script_name).returns("") # as not to depend on Rack env
-    assert_equal "#{url_base}/auth/slack/done", strategy.callback_url
+    assert_equal "#{url_base}/auth/slack/done", strategy.send(:callback_url)
   end
 end
 

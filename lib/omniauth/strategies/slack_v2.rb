@@ -4,14 +4,15 @@ require 'rack/utils'
 
 module OmniAuth
   module Strategies
-    class Slack < OmniAuth::Strategies::OAuth2
+    class SlackV2 < OmniAuth::Strategies::OAuth2
       option :name, 'slack'
 
       option :authorize_options, [:scope, :team]
 
       option :client_options, {
         site: 'https://slack.com',
-        token_url: '/api/oauth.access'
+        token_url: '/api/oauth.v2.access',
+        authorize_url: '/oauth/v2/authorize'
       }
 
       option :auth_token_params, {
