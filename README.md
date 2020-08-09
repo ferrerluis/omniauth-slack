@@ -3,7 +3,7 @@
 This Gem contains the Slack strategy for OmniAuth and supports the
 [Sign in with Slack](https://api.slack.com/docs/sign-in-with-slack) approval flow.
 
-[![Gem Version](https://badge.fury.io/rb/omniauth-slack.svg)](http://badge.fury.io/rb/omniauth-slack)
+[![Gem Version](https://badge.fury.io/rb/omniauth-slack-v2.svg)](http://badge.fury.io/rb/omniauth-slack-v2)
 
 
 ## Before You Begin
@@ -18,13 +18,13 @@ Now sign into the [Slack application dashboard](https://api.slack.com/applicatio
 First start by adding this gem to your Gemfile:
 
 ```ruby
-gem 'omniauth-slack'
+gem 'omniauth-slack-v2'
 ```
 
 If you need to use the latest HEAD version, you can do so with:
 
 ```ruby
-gem 'omniauth-slack', github: 'kmrshntr/omniauth-slack'
+gem 'omniauth-slack-v2', github: 'ferrerluis/omniauth-slack-v2'
 ```
 
 Next, tell OmniAuth about this provider. For a Rails app, your `config/initializers/omniauth.rb` file should look like this:
@@ -188,5 +188,3 @@ end
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/kmrshntr/omniauth-slack/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
