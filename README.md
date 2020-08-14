@@ -1,4 +1,4 @@
-# Omniauth::SlackV2
+# Omniauth::Slack
 
 This Gem contains the Slack strategy for OmniAuth and supports the
 [Sign in with Slack](https://api.slack.com/docs/sign-in-with-slack) approval flow.

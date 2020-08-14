@@ -4,7 +4,7 @@ require 'rack/utils'
 
 module OmniAuth
   module Strategies
-    class SlackV2 < OmniAuth::Strategies::OAuth2
+    class Slack < OmniAuth::Strategies::OAuth2
       option :name, 'slack'
 
       option :authorize_options, [:scope, :user_scope, :team]

@@ -6,8 +6,8 @@ Gem::Specification.new do |spec|
   spec.version       = Omniauth::SlackV2::VERSION
   spec.authors       = ['Luis Ferrer']
   spec.email         = ['hello@ferrerluis.com']
-  spec.description   = %q{OmniAuth strategy for Slack OAuth V2}
-  spec.summary       = %q{OmniAuth strategy for Slack OAuth V2}
+  spec.description   = 'OmniAuth strategy for Slack OAuth V2'
+  spec.summary       = 'OmniAuth strategy for Slack OAuth V2'
   spec.homepage      = 'https://github.com/ferrerluis/omniauth-slack-v2.git'
   spec.license       = 'MIT'
 
