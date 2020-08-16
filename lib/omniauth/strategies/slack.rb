@@ -109,7 +109,7 @@ module OmniAuth
     class SlackSignIn < OmniAuth::Strategies::Slack
       option :name, 'slack_sign_in'
 
-      class ::OAuth2::Client
+      module RequestMonkeyPatch
         def request(*args)
           super.tap do |response|
             user_access_token = response.parsed.dig('authed_user', 'access_token')
@@ -121,6 +121,10 @@ module OmniAuth
             end
           end
         end
+      end
+
+      class ::OAuth2::Client
+        prepend RequestMonkeyPatch
       end
     end
   end
