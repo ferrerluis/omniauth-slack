@@ -105,5 +105,23 @@ module OmniAuth
         full_host + script_name + callback_path
       end
     end
+
+    class SlackSignIn < OmniAuth::Strategies::Slack
+      option :name, 'slack_sign_in'
+
+      class ::OAuth2::Client
+        def request(**args)
+          super(**args).tap do |response|
+            user_access_token = response.parsed.dig('authed_user', 'access_token')
+            if response.parsed['access_token'].nil? && user_access_token
+              # Injecting `access_token` into the root of the payload
+              response.response.env.body = response.parsed.merge(access_token: user_access_token).to_json
+              # The `parsed` method is memoized so we "refresh" it this way
+              response.instance_variable_set('@parsed', nil)
+            end
+          end
+        end
+      end
+    end
   end
 end
