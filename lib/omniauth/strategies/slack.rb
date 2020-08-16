@@ -110,8 +110,8 @@ module OmniAuth
       option :name, 'slack_sign_in'
 
       class ::OAuth2::Client
-        def request(**args)
-          super(**args).tap do |response|
+        def request(*args)
+          super(*args).tap do |response|
             user_access_token = response.parsed.dig('authed_user', 'access_token')
             if response.parsed['access_token'].nil? && user_access_token
               # Injecting `access_token` into the root of the payload
