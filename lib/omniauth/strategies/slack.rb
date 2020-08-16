@@ -7,7 +7,7 @@ module OmniAuth
     class Slack < OmniAuth::Strategies::OAuth2
       option :name, 'slack'
 
-      option :authorize_options, [:scope, :user_scope, :team]
+      option :authorize_options, %i[scope user_scope team]
 
       option :client_options, {
         site: 'https://slack.com',
@@ -57,9 +57,9 @@ module OmniAuth
 
       def authorize_params
         super.tap do |params|
-          %w[scope user_scope team].each do |v|
+          options[:authorize_options].each do |v|
             if request.params[v]
-              params[v.to_sym] = request.params[v]
+              params[v] = request.params[v.to_s]
             end
           end
         end
