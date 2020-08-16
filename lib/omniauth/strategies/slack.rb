@@ -106,6 +106,10 @@ module OmniAuth
       end
     end
 
+    class AddToSlack < OmniAuth::Strategies::Slack
+      option :name, 'add_to_slack'
+    end
+
     class SlackSignIn < OmniAuth::Strategies::Slack
       option :name, 'slack_sign_in'
 
