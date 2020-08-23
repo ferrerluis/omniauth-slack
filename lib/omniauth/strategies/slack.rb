@@ -116,6 +116,7 @@ module OmniAuth
       module RequestMonkeyPatch
         def request(*args)
           super.tap do |response|
+            binding.pry
             user_access_token = response.parsed.dig('authed_user', 'access_token')
             if response.parsed['access_token'].nil? && user_access_token
               # Injecting `access_token` into the root of the payload
