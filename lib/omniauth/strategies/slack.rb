@@ -64,6 +64,7 @@ module OmniAuth
       end
 
       def identity
+        binding.pry
         @identity ||= access_token.get('/api/users.identity').parsed
       end
 
