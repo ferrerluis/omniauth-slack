@@ -111,8 +111,6 @@ module OmniAuth
     end
 
     class SlackSignIn < OmniAuth::Strategies::Slack
-      option :name, 'slack_sign_in'
-
       module RequestMonkeyPatch
         def request(*args)
           super.tap do |response|
