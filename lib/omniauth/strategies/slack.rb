@@ -26,6 +26,7 @@ module OmniAuth
       uid { "#{user_identity['id']}-#{team_identity['id']}" }
 
       info do
+        binding.pry
         hash = {
           name: user_identity['name'],
           email: user_identity['email'],    # Requires the identity.email scope
@@ -43,6 +44,7 @@ module OmniAuth
       end
 
       extra do
+        binding.pry
         {
           raw_info: {
             team_identity: team_identity,  # Requires identify:basic scope
