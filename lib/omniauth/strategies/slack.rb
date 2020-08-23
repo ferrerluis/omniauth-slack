@@ -114,7 +114,9 @@ module OmniAuth
       module RequestMonkeyPatch
         def request(*args)
           super.tap do |response|
-            binding.pry
+            # We only want to run this hacky monkey patch if we're dealing with Slack
+            return unless URI(site).host == 'slack.com'
+
             user_access_token = response.parsed.dig('authed_user', 'access_token')
             if response.parsed['access_token'].nil? && user_access_token
               # Injecting `access_token` into the root of the payload
