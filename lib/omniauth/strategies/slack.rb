@@ -26,29 +26,25 @@ module OmniAuth
       uid { "#{user_identity['id']}-#{team_identity['id']}" }
 
       info do
-        binding.pry
-        hash = {
-          name: user_identity['name'],
-          email: user_identity['email'],    # Requires the identity.email scope
-          image: user_identity['image_48'], # Requires the identity.avatar scope
-          team_name: team_identity['name']  # Requires the identity.team scope
+        {
+          user: {
+            id: user_identity['id'],
+            name: user_identity['name'],
+            email: user_identity['email'],    # Requires the identity.email scope
+            image: user_identity['image_48'], # Requires the identity.avatar scope
+          },
+          team: {
+            id: team_identity['id'],
+            name: team_identity['name']  # Requires the identity.team scope
+          }
         }
-
-        unless skip_info?
-          [:first_name, :last_name, :phone].each do |key|
-            hash[key] = user_info['user'].to_h['profile'].to_h[key.to_s]
-          end
-        end
-
-        hash
       end
 
       extra do
-        binding.pry
         {
           raw_info: {
-            team_identity: team_identity,  # Requires identify:basic scope
-            user_identity: user_identity,  # Requires identify:basic scope
+            user_identity: user_identity, # Requires identify:basic scope
+            team_identity: team_identity, # Requires identify:basic scope
             user_info: user_info,         # Requires the users:read scope
             team_info: team_info,         # Requires the team:read scope
             web_hook_info: web_hook_info,
@@ -80,11 +76,12 @@ module OmniAuth
       end
 
       def user_info
-        url = URI.parse('/api/users.info')
-        url.query = Rack::Utils.build_query(user: user_identity['id'])
-        url = url.to_s
+        @user_info ||= begin
+          url = URI.parse('/api/users.info')
+          url.query = Rack::Utils.build_query(user: user_identity['id'])
 
-        @user_info ||= access_token.get(url).parsed
+          access_token.get(url.to_s).parsed
+        end
       end
 
       def team_info
@@ -108,11 +105,18 @@ module OmniAuth
       end
     end
 
-    class AddToSlack < OmniAuth::Strategies::Slack
-      option :name, 'add_to_slack'
-    end
+    class SignInWithSlack < OmniAuth::Strategies::Slack
+      option :name, 'sign_in_with_slack'
 
-    class SlackSignIn < OmniAuth::Strategies::Slack
+      extra do
+        {
+          raw_info: {
+            user_identity: user_identity, # Requires identify:basic scope
+            team_identity: team_identity  # Requires identify:basic scope
+          }
+        }
+      end
+
       module RequestMonkeyPatch
         def request(*args)
           super.tap do |response|
