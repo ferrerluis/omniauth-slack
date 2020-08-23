@@ -108,6 +108,8 @@ module OmniAuth
     class SignInWithSlack < OmniAuth::Strategies::Slack
       option :name, 'sign_in_with_slack'
 
+      option :authorize_options, %i[user_scope team]
+
       extra do
         {
           raw_info: {
