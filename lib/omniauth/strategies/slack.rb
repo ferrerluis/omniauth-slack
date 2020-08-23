@@ -20,10 +20,9 @@ module OmniAuth
         param_name: 'token'
       }
 
-      # User ID is not guaranteed to be globally unique across all Slack users.
-      # The combination of user ID and team ID, on the other hand, is guaranteed
-      # to be globally unique.
-      uid { "#{user_identity['id']}-#{team_identity['id']}" }
+      # Since this strategy revolves around the entire Slack
+      # workspace, the UID becomes the workspace Team ID
+      uid { team_info.dig('team', 'id') }
 
       info do
         {
@@ -102,6 +101,11 @@ module OmniAuth
       option :name, 'sign_in_with_slack'
 
       option :authorize_options, %i[user_scope team]
+
+      # User ID is not guaranteed to be globally unique across all Slack users.
+      # The combination of user ID and team ID, on the other hand, is guaranteed
+      # to be globally unique.
+      uid { "#{user_identity['id']}-#{team_identity['id']}" }
 
       info do
         {
