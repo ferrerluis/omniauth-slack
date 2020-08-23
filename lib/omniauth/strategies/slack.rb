@@ -27,15 +27,18 @@ module OmniAuth
 
       info do
         {
-          user: {
-            id: user_identity['id'],
-            name: user_identity['name'],
-            email: user_identity['email'],    # Requires the identity.email scope
-            image: user_identity['image_48'], # Requires the identity.avatar scope
+          team: { # Requires the team:read scope
+            id: team_info.dig('team', 'id'),
+            name: team_info.dig('team', 'name'),
+            domain: team_info.dig('team', 'domain'),
+            icon: team_info.dig('team', 'icon', 'image_102')
           },
-          team: {
-            id: team_identity['id'],
-            name: team_identity['name']  # Requires the identity.team scope
+          user: { # Requires the users:read scope
+            id: user_info.dig('user', 'id'),
+            name: user_info.dig('user', 'name'),
+            real_name: user_info.dig('user', 'real_name'),
+            email: user_info.dig('user', 'profile', 'email'),
+            image: user_info.dig('user', 'profile', 'image_48'),
           }
         }
       end
@@ -43,8 +46,6 @@ module OmniAuth
       extra do
         {
           raw_info: {
-            user_identity: user_identity, # Requires identify:basic scope
-            team_identity: team_identity, # Requires identify:basic scope
             user_info: user_info,         # Requires the users:read scope
             team_info: team_info,         # Requires the team:read scope
             web_hook_info: web_hook_info,
@@ -63,23 +64,14 @@ module OmniAuth
         end
       end
 
-      def identity
-        binding.pry
-        @identity ||= access_token.get('/api/users.identity').parsed
-      end
-
-      def user_identity
-        @user_identity ||= identity['user'].to_h
-      end
-
-      def team_identity
-        @team_identity ||= identity['team'].to_h
+      def user_id
+        access_token.params.dig('authed_user', 'id')
       end
 
       def user_info
         @user_info ||= begin
           url = URI.parse('/api/users.info')
-          url.query = Rack::Utils.build_query(user: user_identity['id'])
+          url.query = Rack::Utils.build_query(user: user_id)
 
           access_token.get(url.to_s).parsed
         end
@@ -111,6 +103,21 @@ module OmniAuth
 
       option :authorize_options, %i[user_scope team]
 
+      info do
+        {
+          user: {
+            id: user_identity['id'],
+            name: user_identity['name'],
+            email: user_identity['email'],    # Requires the identity.email scope
+            image: user_identity['image_48'], # Requires the identity.avatar scope
+          },
+          team: {
+            id: team_identity['id'],
+            name: team_identity['name']  # Requires the identity.team scope
+          }
+        }
+      end
+
       extra do
         {
           raw_info: {
@@ -118,6 +125,20 @@ module OmniAuth
             team_identity: team_identity  # Requires identify:basic scope
           }
         }
+      end
+
+      def identity
+        binding.pry
+        @identity ||= access_token.get('/api/users.identity').parsed
+      end
+
+      def user_identity
+        @user_identity ||= identity['user'].to_h
+      end
+
+
+      def team_identity
+        @team_identity ||= identity['team'].to_h
       end
 
       module RequestMonkeyPatch
